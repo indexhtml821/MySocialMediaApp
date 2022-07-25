@@ -6,6 +6,11 @@ __pycache__
 db.sqlite3
 media
 
+#templates
+templates
+media
+static
+
 # Backup files # 
 *.bak 
 
