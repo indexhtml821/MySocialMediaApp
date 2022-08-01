@@ -35,8 +35,8 @@ def signup(request):
                 user.save()
 
                 #log user in and redirect to settings page
-               # user_login = auth.authenticate(username=username, password=password)
-               # auth.login(request, user_login)
+                user_login = auth.authenticate(username=username, password=password)
+                auth.login(request, user_login)
 
                 #create a Profile object for the new user
                 user_model = User.objects.get(username=username)
@@ -74,5 +74,12 @@ def signin(request):
 
 @login_required(login_url='signin')
 def logout(request): 
+
     auth.logout(request)
-    return redirect('signin')       
+    return redirect('signin')     
+
+@login_required(login_url='signin')
+def settings(request):
+    user_profile = Profile.objects.get(user=request.user)
+    return render(request,'setting.html', {'user_profile':user_profile})  
+
