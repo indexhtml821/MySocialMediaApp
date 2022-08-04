@@ -11,6 +11,9 @@ templates
 media
 static
 
+#migrations
+migrations
+
 # Backup files # 
 *.bak 
 
