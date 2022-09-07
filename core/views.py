@@ -131,21 +131,26 @@ def logout(request):
 def settings(request):
    current_user = request.user
    searched_user = request.POST.get('follower')
-   #searched_string = searched_user.username
-   #user_profile2 = Profile.objects.get(user=request.user)
+   is_admin_view = request.POST.get('adminview')
+   # searched_string = searched_user.username
+   # user_profile2 = Profile.objects.get(user=request.user)
 
-   #print(searched_user)
+   # print(searched_user)
+
    
    if current_user.groups.filter(name='Administracion').exists():
-    #user_profile = Profile.objects.get(user = request.follower)
-    print(searched_user)
-    print('user wanted')
+        print('prueba1')
+        user_object = User.objects.get(username=searched_user)
+        user_profile = Profile.objects.get(user=user_object)
+        print('prueba1.2')
    else:
-    print('prueba')
-    user_profile = Profile.objects.get(user=request.user)
-    print(user_profile)
+        print('prueba')
+        user_profile = Profile.objects.get(user=request.user)
+        print(user_profile)
+        print('prueba3')
 
-    if request.method == 'POST':
+   if  is_admin_view != 'admin-view':
+        print('prueba4')
         if request.FILES.get('image') == None:
             image = user_profile.profileimg
             bio = request.POST['bio']
@@ -165,9 +170,8 @@ def settings(request):
             user_profile.location = location
             user_profile.save()
 
-        return redirect('settings')
-
-    return render(request, 'setting.html', {'user_profile': user_profile})
+            return redirect('settings')
+   return render(request, 'setting.html', {'user_profile': user_profile})
 
 
 @login_required(login_url='signin')
@@ -190,14 +194,14 @@ def upload(request):
 def profile(request, pk):
 
     current_user = request.user
-    current_name = current_user.username
 
     user_object = User.objects.get(username=pk)
     user_profile = Profile.objects.get(user=user_object)
     user_posts = Post.objects.filter(user=pk)
     user_post_length = len(user_posts)
+    
 
-    #print(current_name)
+    # print(current_name)
     follower = request.user.username
     user = pk
 
