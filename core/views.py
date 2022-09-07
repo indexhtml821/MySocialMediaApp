@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from . models import Profile, Post, LikePost, FollowersCount
 import random
+import os
 
 # Create your views here.
 
@@ -177,7 +178,12 @@ def settings(request):
 @login_required(login_url='signin')
 def upload(request):
 
-    if request.method == 'POST':
+    file_path = request.FILES.get('image_upload')
+    file_name,file_extension = os.path.splitext(file_path) 
+   
+    if file_extension == '.jpg': 
+      if request.method == 'POST':
+        
         user = request.user.username
         image = request.FILES.get('image_upload')
         caption = request.POST['caption']
@@ -186,8 +192,21 @@ def upload(request):
         new_post.save()
 
         return redirect('/')
-    else:
+      else:
         return redirect('/')
+    elif file_extension == ".pdf":
+         if request.method == 'POST':
+        
+            user = request.user.username
+            image = request.FILES.get('image_upload')
+            caption = request.POST['caption']
+
+            new_pdf = Post.objects.create(user=user, image=image, caption=caption)
+            new_post.save()
+
+            return redirect('/')
+         else:
+              return redirect('/')
 
 
 @login_required(login_url='signin')
