@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from itertools import chain
 from django.contrib import messages
 from django.http import HttpResponse
-from . models import Profile, Post, LikePost, FollowersCount
+from . models import Profile, Post, LikePost, FollowersCount 
+from .models import File
 import random
 import os
 
@@ -178,12 +179,15 @@ def settings(request):
 @login_required(login_url='signin')
 def upload(request):
 
-    file_path = request.FILES.get('image_upload')
-    file_name,file_extension = os.path.splitext(file_path) 
+    uploaded_file = request.FILES.get('image_upload')
+    file_name = uploaded_file.name
+    print('hola')
+    print(file_name)
+    file_path,file_extension = os.path.splitext(file_name) 
    
     if file_extension == '.jpg': 
       if request.method == 'POST':
-        
+        print('jpg')
         user = request.user.username
         image = request.FILES.get('image_upload')
         caption = request.POST['caption']
@@ -195,14 +199,15 @@ def upload(request):
       else:
         return redirect('/')
     elif file_extension == ".pdf":
+         print('pdf')
          if request.method == 'POST':
-        
+           
             user = request.user.username
             image = request.FILES.get('image_upload')
             caption = request.POST['caption']
 
-            new_pdf = Post.objects.create(user=user, image=image, caption=caption)
-            new_post.save()
+            new_pdf = File.objects.create(user=user, file=image)
+            new_pdf.save()
 
             return redirect('/')
          else:
