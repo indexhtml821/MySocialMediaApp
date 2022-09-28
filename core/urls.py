@@ -13,6 +13,8 @@ urlpatterns =[
     path('like-post', views.like_post ,name='like-post'),
     path('follow', views.follow ,name='follow'),
     path('search', views.search ,name='search'),
+    path('calendar', views.calendar ,name='calendar'),
+    path('save-event', views.save_event ,name='save-event'),
 
 
     
