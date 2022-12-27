@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<style>
+    ul {
+        color: black;
+        list-style: none;
+    }
+
+    li {
+        text-align:left;
+        list-style: none;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto auto auto auto auto;
+        gap: 10px;
+        background-color: #2196F3;
+        padding: 10px;
+    }
+
+    .grid-container>div {
+        background-color: rgba(255, 255, 255, 0.8);
+        text-align: center;
+        padding: 20px 0;
+        font-size: 30px;
+    }
+
+    .weekdays {
+        margin: 0;
+        padding: 10px 0;
+        background-color: #ddd;
+    }
+
+    .weekdays li {
+        display: inline-block;
+        width: 13.6%;
+        color: #666;
+        text-align: center;
+    }
+</style>
+{%comment%}
+{% load static %}
+<center>
+    <h1> hello {{year}}<br>{{month}}<br>
+        {{cal|safe}}
+</center>
+
+{%endcomment%}
+
+<form action="" method="POST">
+    
+   
+    <button type="Crear evento" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Crear Evento</button>
+    <div class="text-center mt-5 space-x-2">
+    
+</form>
+
+<h1> {{year}}<br>{{month}}<br>
+
+    <ul class="weekdays">
+        <li>Mo</li>
+        <li>Tu</li>
+        <li>We</li>
+        <li>Th</li>
+        <li>Fr</li>
+        <li>Sa</li>
+        <li>Su</li>
+    </ul>
+
+    <div class="grid-container">
+        {% for o in days %}
+        <div>
+            <ul class="day">
+                <li>{{o}}</li>
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class ="modal fade" id ="edicion" role="dialog"> </div>

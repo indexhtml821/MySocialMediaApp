@@ -1,3 +1,4 @@
+from datetime import datetime
 from operator import truediv
 from tokenize import group
 from turtle import pos
@@ -8,10 +9,13 @@ from django.contrib.auth.decorators import login_required
 from itertools import chain
 from django.contrib import messages
 from django.http import HttpResponse
-from . models import Profile, Post, LikePost, FollowersCount 
+from . models import Profile, Post, LikePost, FollowersCount
 from .models import File
 import random
 import os
+import calendar
+from calendar import HTMLCalendar
+from .forms.forms import CalendarForm
 
 # Create your views here.
 
@@ -131,27 +135,26 @@ def logout(request):
 
 @login_required(login_url='signin')
 def settings(request):
-   current_user = request.user
-   searched_user = request.POST.get('follower')
-   is_admin_view = request.POST.get('adminview')
-   # searched_string = searched_user.username
-   # user_profile2 = Profile.objects.get(user=request.user)
+    current_user = request.user
+    searched_user = request.POST.get('follower')
+    is_admin_view = request.POST.get('adminview')
+    # searched_string = searched_user.username
+    # user_profile2 = Profile.objects.get(user=request.user)
 
-   # print(searched_user)
+    # print(searched_user)
 
-   
-   if current_user.groups.filter(name='Administracion').exists():
+    if current_user.groups.filter(name='Administracion').exists():
         print('prueba1')
         user_object = User.objects.get(username=searched_user)
         user_profile = Profile.objects.get(user=user_object)
         print('prueba1.2')
-   else:
+    else:
         print('prueba')
         user_profile = Profile.objects.get(user=request.user)
         print(user_profile)
         print('prueba3')
 
-   if  is_admin_view != 'admin-view':
+    if is_admin_view != 'admin-view':
         print('prueba4')
         if request.FILES.get('image') == None:
             image = user_profile.profileimg
@@ -173,7 +176,7 @@ def settings(request):
             user_profile.save()
 
             return redirect('settings')
-   return render(request, 'setting.html', {'user_profile': user_profile})
+    return render(request, 'setting.html', {'user_profile': user_profile})
 
 
 @login_required(login_url='signin')
@@ -183,25 +186,26 @@ def upload(request):
     file_name = uploaded_file.name
     print('hola')
     print(file_name)
-    file_path,file_extension = os.path.splitext(file_name) 
-   
-    if file_extension == '.jpg': 
-      if request.method == 'POST':
-        print('jpg')
-        user = request.user.username
-        image = request.FILES.get('image_upload')
-        caption = request.POST['caption']
+    file_path, file_extension = os.path.splitext(file_name)
 
-        new_post = Post.objects.create(user=user, image=image, caption=caption)
-        new_post.save()
+    if file_extension == '.jpg':
+        if request.method == 'POST':
+            print('jpg')
+            user = request.user.username
+            image = request.FILES.get('image_upload')
+            caption = request.POST['caption']
 
-        return redirect('/')
-      else:
-        return redirect('/')
+            new_post = Post.objects.create(
+                user=user, image=image, caption=caption)
+            new_post.save()
+
+            return redirect('/')
+        else:
+            return redirect('/')
     elif file_extension == ".pdf":
-         print('pdf')
-         if request.method == 'POST':
-           
+        print('pdf')
+        if request.method == 'POST':
+
             user = request.user.username
             image = request.FILES.get('image_upload')
             caption = request.POST['caption']
@@ -210,8 +214,8 @@ def upload(request):
             new_pdf.save()
 
             return redirect('/')
-         else:
-              return redirect('/')
+        else:
+            return redirect('/')
 
 
 @login_required(login_url='signin')
@@ -223,7 +227,6 @@ def profile(request, pk):
     user_profile = Profile.objects.get(user=user_object)
     user_posts = Post.objects.filter(user=pk)
     user_post_length = len(user_posts)
-    
 
     # print(current_name)
     follower = request.user.username
@@ -316,3 +319,25 @@ def search(request):
 
         username_profile_list = list(chain(*username_profile_list))
     return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
+
+
+def jira(request, year=datetime.now().year, month=datetime.now().month):
+
+    print(month)
+    montht = month.title()
+
+    month_number = list(calendar.month_name).index(montht)
+    month_number = int(month_number)
+    print(month_number)
+    cal = calendar.Calendar()
+    days = list(cal.itermonthdays(year,month_number))
+
+    return render(request, 'cal.html', {"year": year, "month": montht, "month_number": month_number, "days": days})
+
+
+def save_event(request):
+
+   context = {}
+   context ['form'] = CalendarForm()
+
+   return render(request, 'eveditor.html',context)
