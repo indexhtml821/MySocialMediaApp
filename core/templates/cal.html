@@ -41,20 +41,16 @@
 </style>
 {%comment%}
 {% load static %}
-<center>
-    <h1> hello {{year}}<br>{{month}}<br>
-        {{cal|safe}}
-</center>
 
 {%endcomment%}
 
-<form action="" method="POST">
+
     
    
-    <button type="Crear evento" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Crear Evento</button>
+    <button   href="/save-event">Crear Evento</button>
     <div class="text-center mt-5 space-x-2">
-    
-</form>
+        <a href="/save-event" data-ripple="">Account Settings</a>
+
 
 <h1> {{year}}<br>{{month}}<br>
 
