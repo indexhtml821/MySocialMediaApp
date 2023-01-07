@@ -15,7 +15,7 @@ import random
 import os
 import calendar
 from calendar import HTMLCalendar
-from .forms.forms import CalendarForm
+from .forms.forms import EventForm
 
 # Create your views here.
 
@@ -338,6 +338,6 @@ def jira(request, year=datetime.now().year, month=datetime.now().month):
 def save_event(request):
 
    context = {}
-   context ['form'] = CalendarForm()
+   context ['form'] = EventForm
 
    return render(request, 'eveditor.html',context)
