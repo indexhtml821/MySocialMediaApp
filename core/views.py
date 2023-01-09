@@ -330,14 +330,23 @@ def jira(request, year=datetime.now().year, month=datetime.now().month):
     month_number = int(month_number)
     print(month_number)
     cal = calendar.Calendar()
-    days = list(cal.itermonthdays(year,month_number))
+    days = list(cal.itermonthdays(year, month_number))
 
     return render(request, 'cal.html', {"year": year, "month": montht, "month_number": month_number, "days": days})
 
 
+@login_required(login_url='signin')
 def save_event(request):
+    
+    form = EventForm()
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
 
-   context = {}
-   context ['form'] = EventForm
+            form.save()
+            print('is valid')
+            return jira
 
-   return render(request, 'eveditor.html',context)
+    context = {'form': form}
+
+    return render(request, 'eveditor.html', context)
