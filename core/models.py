@@ -64,13 +64,16 @@ class FollowersCount(models.Model):
         return self.user
 
 
+
+
 class Event(models.Model):
-    user = models.CharField(max_length=100)
-    name = models.CharField(max_length=200)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    user = models.ManyToManyField(Profile)
+    title = models.CharField(max_length=200)
     description = models.TextField()
     starts_at = models.DateTimeField(default=datetime.now)
     ends_at = models.DateTimeField(default=datetime.now)
     created_at = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return self.name
+        return self.title
